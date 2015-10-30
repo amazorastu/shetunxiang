@@ -1,5 +1,5 @@
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
+#include "MenuLayer.h"
 
 USING_NS_CC;
 
@@ -27,9 +27,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if(!glview) {
-        glview = GLViewImpl::create("My Game");
+		glview = GLViewImpl::createWithRect("SheTunXiang", Rect(0, 0, 430, 700));
         director->setOpenGLView(glview);
     }
+
+	glview->setDesignResolutionSize(director->getWinSize().width / director->getWinSize().height * 2048.0f, 2048.0f, ResolutionPolicy::SHOW_ALL);
 
     // turn on display FPS
     director->setDisplayStats(true);
@@ -38,7 +40,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     director->setAnimationInterval(1.0 / 60);
 
     // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
+    auto scene = MenuLayer::createScene();
 
     // run
     director->runWithScene(scene);
