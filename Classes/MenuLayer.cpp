@@ -54,11 +54,50 @@ void MenuLayer::onEnterTransitionDidFinish()
 	button0->runAction(FadeIn::create(0.5f));
 	button1->runAction(FadeIn::create(0.5f));
 	button2->runAction(FadeIn::create(0.5f));
+
+	this->addKeyboardEvent();
 }
+
+void MenuLayer::addKeyboardEvent()
+{
+	auto listener = EventListenerKeyboard::create();
+	listener->onKeyReleased = CC_CALLBACK_2(MenuLayer::onKeyReleased, this);
+	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
+
+}
+void MenuLayer::onKeyReleased(EventKeyboard::KeyCode keyCode, Event * pEvent)
+{
+	if (keyCode == EventKeyboard::KeyCode::KEY_BACK)
+	{
+		Director::getInstance()->end();
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+		exit(0);
+#endif
+	}
+}
+
 
 void MenuLayer::buttonCallback(Ref* ref)
 {
-	log("1");
+	auto button = (MenuItemImage*)ref;
+	if (button == button0)
+	{
+		Director::getInstance()->pushScene(TransitionCrossFade::create(0.3f, GameLayer::createScene()));
+	}
+	else if (button == button1)
+	{
+
+	}
+	else if (button == button2)
+	{
+		Director::getInstance()->end();
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+		exit(0);
+#endif
+
+	}
 }
 
 std::string MenuLayer::WStrToUTF8(const std::wstring& src)
