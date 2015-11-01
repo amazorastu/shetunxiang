@@ -25,7 +25,18 @@ bool MenuLayer::init()
 		return false;
 	}
 
-	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("texture/texture.plist");
+	logo = Sprite::create("res/Logo.png");
+	logo->setPosition(Director::getInstance()->getWinSize()*0.5f);
+	this->addChild(logo, 100);
+
+	
+
+	return true;
+}
+
+void MenuLayer::onEnterTransitionDidFinish()
+{
+	logo->runAction(Sequence::create(DelayTime::create(2.0f), FadeOut::create(0.5f), CallFunc::create([&]{logo->removeFromParentAndCleanup(true); }), nullptr));
 
 	label = Label::createWithTTF(WStrToUTF8(L"ÉßÍÌÏó"), "fonts/simhei.ttf", 150.0f);
 	label->setColor(Color3B::BLACK);
@@ -46,11 +57,6 @@ bool MenuLayer::init()
 	menu->setPosition(Director::getInstance()->getWinSize()*0.5f);
 	this->addChild(menu);
 
-	return true;
-}
-
-void MenuLayer::onEnterTransitionDidFinish()
-{
 	button0->runAction(FadeIn::create(0.5f));
 	button1->runAction(FadeIn::create(0.5f));
 	button2->runAction(FadeIn::create(0.5f));

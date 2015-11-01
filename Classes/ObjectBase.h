@@ -5,7 +5,6 @@
 enum ObjectType
 {
 	objectTypeSnakeAttack,
-	objectTypeSnakeDefense,
 
 	objectTypeXiang0,
 	objectTypeXiang1,
@@ -27,14 +26,23 @@ public:
 
 /*******************************************************************/
 public:
-	
-
+	void setType(ObjectType);
+	void setXY(int, int);
+	int getX();
+	int getY();
+	void setAttack(int);
+	void setDefense(int);
 
 private:
+	ObjectType type;
 	int attack;
 	int defense;
 	bool isAlive;
 	int posX;
 	int posY;
 
+	cocos2d::Sprite* eye1;
+	cocos2d::Sprite* eye2;
+	cocos2d::Label* attackLabel;
+	cocos2d::Label* defenseLabel;
 };

@@ -23,6 +23,8 @@ private:
 public:
 
 private:
+	cocos2d::Sprite* logo;
+
 	cocos2d::Menu* menu;
 	cocos2d::MenuItemImage* button0;
 	cocos2d::MenuItemImage* button1;

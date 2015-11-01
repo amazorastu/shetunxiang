@@ -27,11 +27,13 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if(!glview) {
-		glview = GLViewImpl::createWithRect("SheTunXiang", Rect(0, 0, 430, 700));
+		glview = GLViewImpl::createWithRect("SheTunXiang", Rect(0, 0, 420, 700));
         director->setOpenGLView(glview);
     }
 
 	glview->setDesignResolutionSize(director->getWinSize().width / director->getWinSize().height * 2048.0f, 2048.0f, ResolutionPolicy::SHOW_ALL);
+
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("texture/texture.plist");
 
     // turn on display FPS
     director->setDisplayStats(true);
