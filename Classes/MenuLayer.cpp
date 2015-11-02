@@ -38,7 +38,7 @@ void MenuLayer::onEnterTransitionDidFinish()
 {
 	logo->runAction(Sequence::create(DelayTime::create(2.0f), FadeOut::create(0.5f), nullptr));
 
-	label = Label::createWithTTF(WStrToUTF8(L"ÉßÍÌÏó"), "fonts/simhei.ttf", 150.0f);
+	label = Label::createWithTTF("è›‡åžè±¡", "fonts/simhei.ttf", 150.0f);
 	label->setColor(Color3B::BLACK);
 	label->setPosition(Director::getInstance()->getWinSize().width*0.5f, 1700.0f);
 	this->addChild(label, 2);

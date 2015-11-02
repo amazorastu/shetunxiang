@@ -233,25 +233,25 @@ void GameLayer::onTouchMoved(Touch *touch, Event*)
 {
 	if (isMoved)return;
 	auto currentPos = touch->getLocation();
-	if (currentPos.x - touchPos.x > 200.0f&&currentPos.y - touchPos.y > -100.0f&&currentPos.y - touchPos.y < 100.0f&&snake->getX() < 5)
+	if (currentPos.x - touchPos.x > 100.0f&&currentPos.y - touchPos.y > -50.0f&&currentPos.y - touchPos.y < 50.0f&&snake->getX() < 5)
 	{
 		ObjectMap::doMove(snake->getX(), snake->getY(), 2);
 		//snake->setXY(snake->getX() + 1, snake->getY());
 		isMoved = true;
 	}
-	else if (currentPos.x - touchPos.x < -200.0f&&currentPos.y - touchPos.y > -100.0f&&currentPos.y - touchPos.y < 100.0f&&snake->getX() > 1)
+	else if (currentPos.x - touchPos.x < -100.0f&&currentPos.y - touchPos.y > -50.0f&&currentPos.y - touchPos.y < 50.0f&&snake->getX() > 1)
 	{
 		ObjectMap::doMove(snake->getX(), snake->getY(), 0);
 		//snake->setXY(snake->getX() - 1, snake->getY());
 		isMoved = true;
 	}
-	else if (currentPos.y - touchPos.y > 200.0f&&currentPos.x - touchPos.x > -100.0f&&currentPos.x - touchPos.x < 100.0f&&snake->getY() < 8)
+	else if (currentPos.y - touchPos.y > 100.0f&&currentPos.x - touchPos.x > -50.0f&&currentPos.x - touchPos.x < 50.0f&&snake->getY() < 8)
 	{
 		ObjectMap::doMove(snake->getX(), snake->getY(), 1);
 		//snake->setXY(snake->getX(), snake->getY() + 1);
 		isMoved = true;
 	}
-	else if (currentPos.y - touchPos.y < -200.0f&&currentPos.x - touchPos.x > -100.0f&&currentPos.x - touchPos.x < 100.0f&&snake->getY() > 1)
+	else if (currentPos.y - touchPos.y < -100.0f&&currentPos.x - touchPos.x > -50.0f&&currentPos.x - touchPos.x < 50.0f&&snake->getY() > 1)
 	{
 		ObjectMap::doMove(snake->getX(), snake->getY(), 3);
 		//snake->setXY(snake->getX(), snake->getY() - 1);

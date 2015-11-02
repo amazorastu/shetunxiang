@@ -80,7 +80,8 @@ void ObjectBase::setType(ObjectType pType)
 		attackLabel->setString("0");
 		defenseLabel->setString("0");
 		this->setAttack(random(0, 8));
-		this->setDefense(random(2, 8));
+		this->setDefense(random(0, 8));
+		if(attack == 0 && defense <= 1)this->setAttack(1);
 		attackLabel->setPosition(Vec2(50.0f, 125.0f));
 		defenseLabel->setPosition(Vec2(200.0f, 125.0f));
 		this->addChild(attackLabel);
@@ -92,8 +93,9 @@ void ObjectBase::setType(ObjectType pType)
 		defense = 0;
 		attackLabel->setString("0");
 		defenseLabel->setString("0");
-		this->setAttack(random(1, 8));
+		this->setAttack(random(0, 8));
 		this->setDefense(random(0, 8));
+		if(attack ==0 && defense <= 1)this->setAttack(1);
 		attackLabel->setPosition(Vec2(50.0f, 175.0f));
 		defenseLabel->setPosition(Vec2(200.0f, 175.0f));
 		this->addChild(attackLabel);
