@@ -4,15 +4,16 @@
 
 enum ObjectType
 {
-	objectTypeSnakeAttack,
+	objectTypeSnakeAttack = 11,
 
-	objectTypeXiang0,
-	objectTypeXiang1,
-	objectTypeXiang2,
-	objectTypeXiang3,
+	objectTypeXiang1 = 1,
+	objectTypeXiang2 = 2,
+	objectTypeXiang3 = 3,
+	objectTypeXiang4 = 4,
 
-	objectTypeAnimalAttack,
-	objectTypeAnimalDefense
+	objectTypeAnimalDefense = 6,
+	objectTypeAnimalAttack = 7,
+	objectTypeElephant = 8
 };
 
 class ObjectBase : public cocos2d::Sprite
@@ -27,19 +28,29 @@ public:
 /*******************************************************************/
 public:
 	void setType(ObjectType);
+	ObjectType getType();
 	void setXY(int, int);
 	int getX();
 	int getY();
 	void setAttack(int);
 	void setDefense(int);
+	int getAttack();
+	int getDefense();
+	bool getDirection();
+	void setDefending(bool);
+	bool getDefending();
+	int timer;
 
 private:
 	ObjectType type;
 	int attack;
 	int defense;
-	bool isAlive;
+	bool isDefending;
 	int posX;
 	int posY;
+
+	
+	bool direction;
 
 	cocos2d::Sprite* eye1;
 	cocos2d::Sprite* eye2;

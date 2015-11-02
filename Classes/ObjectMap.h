@@ -4,20 +4,30 @@
 
 #include "ObjectBase.h"
 
-enum MoveResult
+class ObjectMap
 {
-	moveResultWin,
-	moveResultLose
-};
+public:
+	ObjectMap();
+	~ObjectMap();
 
-class Map
-{
 public:
 	static ObjectBase* map[7][10];
 
-	static MoveResult doMove(int posX, int posY, int direction);
+	static void init();
 
-	static void addObject(ObjectBase*);
+	static void doMove(int posX, int posY, int direction);
+
+	static bool dealContact(ObjectBase*, ObjectBase*);
+
+	static bool addObject(ObjectBase*);
+
+	static void removeObject(int,int,bool eat = false);
 
 	static void step();
+
+	static int gameState;
+	
+	static bool hasElephant;
+
+	static bool ateElephant;
 };

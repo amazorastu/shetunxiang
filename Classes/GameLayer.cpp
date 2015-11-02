@@ -49,9 +49,8 @@ bool GameLayer::init()
 	snake = ObjectBase::create();
 	snake->setPosition(-200.0f, -200.0f);
 	snake->setType(objectTypeSnakeAttack);
-	this->addChild(snake,2);
+	this->addChild(snake,3);
 	snake->setXY(random(1, 5), random(1, 8));
-
 	ObjectMap::addObject(snake);
 
 	return true;
@@ -66,7 +65,46 @@ void GameLayer::onEnterTransitionDidFinish()
 
 void GameLayer::update(float dt)
 {
-	
+	if (ObjectMap::hasElephant == false && ObjectMap::ateElephant == false)
+	{
+		this->addObject(objectTypeElephant);
+	}
+
+	if (ObjectMap::gameState == 0)
+	{
+		this->addObject(objectTypeXiang1);
+	}
+	else if (ObjectMap::gameState == 2)
+	{
+		this->addObject(objectTypeXiang2);
+	}
+	else if (ObjectMap::gameState == 4)
+	{
+		this->addObject(objectTypeXiang3);
+	}
+	else if (ObjectMap::gameState == 6)
+	{
+		this->addObject(objectTypeXiang4);
+	}
+	else if (ObjectMap::gameState >= 100)
+	{
+		this->showGameOverDialog(false);
+	}
+	else if (ObjectMap::gameState >= 50)
+	{
+		this->showGameOverDialog(true);
+	}
+
+	if (random(1, 100) == 1)
+	{
+		this->addObject(objectTypeAnimalAttack);
+	}
+	if (random(1, 100) == 1)
+	{
+		this->addObject(objectTypeAnimalDefense);
+	}
+
+	ObjectMap::step();
 }
 
 
@@ -128,7 +166,56 @@ void GameLayer::showGameOverDialog(bool win)
 	this->addChild(dialog, 100);
 }
 
+void GameLayer::addObject(ObjectType pType)
+{
+	auto obj = ObjectBase::create();
+	obj->setOpacity(0.0f);
+	this->addChild(obj,2);
+	
 
+	switch (pType)
+	{
+	case objectTypeXiang1:
+		obj->setType(objectTypeXiang1);
+		break;
+	case objectTypeXiang2:
+		obj->setType(objectTypeXiang2);
+		break;
+	case objectTypeXiang3:
+		obj->setType(objectTypeXiang3);
+		break;
+	case objectTypeXiang4:
+		obj->setType(objectTypeXiang4);
+		break;
+	case objectTypeAnimalAttack:
+		obj->setType(objectTypeAnimalAttack);
+		break;
+	case objectTypeAnimalDefense:
+		obj->setType(objectTypeAnimalDefense);
+		break;
+	case objectTypeElephant:
+		obj->setType(objectTypeElephant);
+		break;
+	default:
+		break;
+	}
+	if (obj->getDirection())
+	{
+		obj->setXY(0, 0);
+	}
+	else
+	{
+		obj->setXY(6, 0);
+	}
+	obj->setXY(obj->getX(), random(1, 8));
+	obj->stopAllActions();
+	obj->setPosition(Vec2((Director::getInstance()->getWinSize().width - 1250.0f)*0.5f + obj->getX()*250.0f - 125.0f, obj->getY()*250.0f - 125.0f));
+	obj->runAction(FadeIn::create(1.0f));
+	if (!ObjectMap::addObject(obj))
+	{
+		obj->removeFromParentAndCleanup(true);
+	}
+}
 
 
 
@@ -148,27 +235,36 @@ void GameLayer::onTouchMoved(Touch *touch, Event*)
 	auto currentPos = touch->getLocation();
 	if (currentPos.x - touchPos.x > 200.0f&&currentPos.y - touchPos.y > -100.0f&&currentPos.y - touchPos.y < 100.0f&&snake->getX() < 5)
 	{
-		snake->setXY(snake->getX() + 1, snake->getY());
+		ObjectMap::doMove(snake->getX(), snake->getY(), 2);
+		//snake->setXY(snake->getX() + 1, snake->getY());
 		isMoved = true;
 	}
 	else if (currentPos.x - touchPos.x < -200.0f&&currentPos.y - touchPos.y > -100.0f&&currentPos.y - touchPos.y < 100.0f&&snake->getX() > 1)
 	{
-		snake->setXY(snake->getX() - 1, snake->getY());
+		ObjectMap::doMove(snake->getX(), snake->getY(), 0);
+		//snake->setXY(snake->getX() - 1, snake->getY());
 		isMoved = true;
 	}
 	else if (currentPos.y - touchPos.y > 200.0f&&currentPos.x - touchPos.x > -100.0f&&currentPos.x - touchPos.x < 100.0f&&snake->getY() < 8)
 	{
-		snake->setXY(snake->getX(), snake->getY() + 1);
+		ObjectMap::doMove(snake->getX(), snake->getY(), 1);
+		//snake->setXY(snake->getX(), snake->getY() + 1);
 		isMoved = true;
 	}
 	else if (currentPos.y - touchPos.y < -200.0f&&currentPos.x - touchPos.x > -100.0f&&currentPos.x - touchPos.x < 100.0f&&snake->getY() > 1)
 	{
-		snake->setXY(snake->getX(), snake->getY() - 1);
+		ObjectMap::doMove(snake->getX(), snake->getY(), 3);
+		//snake->setXY(snake->getX(), snake->getY() - 1);
 		isMoved = true;
 	}
 }
 void GameLayer::onTouchEnded(Touch *touch, Event*)
 {
+	auto currentPos = touch->getLocation();
+	if (isMoved == false && currentPos.x - touchPos.x > -50.0f&&currentPos.x - touchPos.x<50.0f&&currentPos.y - touchPos.y>-50.0f&&currentPos.y - touchPos.y < 50.0f)
+	{
+		snake->setDefending(!snake->getDefending());
+	}
 	isTouched = false;
 	isMoved = false;
 }
@@ -234,7 +330,7 @@ std::string GameLayer::WStrToUTF8(const std::wstring& src)
 		}
 		else if (sizeof(wchar_t) > 2 && w <= 0x10ffff)
 		{
-			dest.push_back(0xf0 | ((w >> 18) & 0x07));
+			dest.push_back(0xf0 | ((w >> 16) & 0x07));
 			dest.push_back(0x80 | ((w >> 12) & 0x3f));
 			dest.push_back(0x80 | ((w >> 6) & 0x3f));
 			dest.push_back(0x80 | (w & 0x3f));

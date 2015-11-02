@@ -36,11 +36,14 @@ private:
 	bool isPaused;
 	bool isTouched;
 	bool isMoved;
+	
 	cocos2d::Vec2 touchPos;
 	/***********************************************************/
 private:
 	void showPauseDialog(bool);
 	void showGameOverDialog(bool);
+
+	void addObject(ObjectType);
 
 	cocos2d::LayerColor* dialog;
 

@@ -36,7 +36,7 @@ bool MenuLayer::init()
 
 void MenuLayer::onEnterTransitionDidFinish()
 {
-	logo->runAction(Sequence::create(DelayTime::create(2.0f), FadeOut::create(0.5f), CallFunc::create([&]{logo->removeFromParentAndCleanup(true); }), nullptr));
+	logo->runAction(Sequence::create(DelayTime::create(2.0f), FadeOut::create(0.5f), nullptr));
 
 	label = Label::createWithTTF(WStrToUTF8(L"ÉßÍÌÏó"), "fonts/simhei.ttf", 150.0f);
 	label->setColor(Color3B::BLACK);
@@ -89,6 +89,7 @@ void MenuLayer::buttonCallback(Ref* ref)
 	auto button = (MenuItemImage*)ref;
 	if (button == button0)
 	{
+		ObjectMap::init();
 		Director::getInstance()->pushScene(TransitionCrossFade::create(0.3f, GameLayer::createScene()));
 	}
 	else if (button == button1)
@@ -130,7 +131,7 @@ std::string MenuLayer::WStrToUTF8(const std::wstring& src)
 		}
 		else if (sizeof(wchar_t) > 2 && w <= 0x10ffff)
 		{
-			dest.push_back(0xf0 | ((w >> 18) & 0x07));
+			dest.push_back(0xf0 | ((w >> 16) & 0x07));
 			dest.push_back(0x80 | ((w >> 12) & 0x3f));
 			dest.push_back(0x80 | ((w >> 6) & 0x3f));
 			dest.push_back(0x80 | (w & 0x3f));

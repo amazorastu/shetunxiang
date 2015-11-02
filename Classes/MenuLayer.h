@@ -4,6 +4,8 @@
 
 #include "GameLayer.h"
 
+#include "ObjectMap.h"
+
 class MenuLayer : public cocos2d::LayerColor
 {
 public:
