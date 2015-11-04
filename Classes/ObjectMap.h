@@ -21,7 +21,9 @@ public:
 
 	static bool addObject(ObjectBase*);
 
-	static void removeObject(int,int,bool eat = false);
+	static void removeObject(int, int, bool eat = false);
+
+	static void removeObject(int, int, int, int, bool eat = false);
 
 	static void step();
 

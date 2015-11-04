@@ -38,7 +38,7 @@ void MenuLayer::onEnterTransitionDidFinish()
 {
 	logo->runAction(Sequence::create(DelayTime::create(2.0f), FadeOut::create(0.5f), nullptr));
 
-	label = Label::createWithTTF("蛇吞象", "fonts/simhei.ttf", 150.0f);
+	label = Label::createWithTTF("蛇吞相", "fonts/simhei.ttf", 150.0f);
 	label->setColor(Color3B::BLACK);
 	label->setPosition(Director::getInstance()->getWinSize().width*0.5f, 1700.0f);
 	this->addChild(label, 2);

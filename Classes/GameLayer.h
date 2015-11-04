@@ -4,6 +4,7 @@
 
 #include "ObjectBase.h"
 #include "ObjectMap.h"
+#include "AudioManager.h"
 
 class GameLayer : public cocos2d::LayerColor
 {
@@ -30,6 +31,7 @@ private:
 	virtual void onTouchCancelled(cocos2d::Touch*, cocos2d::Event*);
 	virtual void onKeyReleased(cocos2d::EventKeyboard::KeyCode, cocos2d::Event*);
 	void buttonCallback(cocos2d::Ref* ref);
+	void tickTime();
 
 	static std::string WStrToUTF8(const std::wstring& src);
 
@@ -37,7 +39,11 @@ private:
 	bool isTouched;
 	bool isMoved;
 	
+	int moveInterval;
+	
 	cocos2d::Vec2 touchPos;
+
+	
 	/***********************************************************/
 private:
 	void showPauseDialog(bool);
@@ -46,6 +52,12 @@ private:
 	void addObject(ObjectType);
 
 	cocos2d::LayerColor* dialog;
+	cocos2d::Label* label1;
+	cocos2d::Label* label2;
+
+	char timeString[6];
+	int timer;
+	cocos2d::Label* timeLabel;
 
 	ObjectBase* snake;
 

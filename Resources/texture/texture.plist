@@ -46,7 +46,7 @@
             <key>Eye1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{129,1892},{125,125}}</string>
+                <string>{{2,1892},{125,125}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -157,7 +157,7 @@
             <key>size</key>
             <string>{256,2048}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:5f43a93281a4e3e3fec3ffa832dfcfa0:1/1$</string>
+            <string>$TexturePacker:SmartUpdate:5b357b08881da4cf2057a6a1aefcd67b:1/1$</string>
             <key>textureFileName</key>
             <string>texture.png</string>
         </dict>

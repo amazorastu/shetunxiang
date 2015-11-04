@@ -40,6 +40,7 @@ public:
 	void setDefending(bool);
 	bool getDefending();
 	int timer;
+	void remove(int, int);
 
 private:
 	ObjectType type;

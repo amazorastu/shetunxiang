@@ -31,12 +31,14 @@ bool AppDelegate::applicationDidFinishLaunching() {
         director->setOpenGLView(glview);
     }
 
-	glview->setDesignResolutionSize(director->getWinSize().width / director->getWinSize().height * 2048.0f, 2048.0f, ResolutionPolicy::SHOW_ALL);
+	//glview->setDesignResolutionSize(director->getWinSize().width / director->getWinSize().height * 2048.0f, 2048.0f, ResolutionPolicy::SHOW_ALL);
+
+	glview->setDesignResolutionSize(1250.0f, 2150.0f, ResolutionPolicy::SHOW_ALL);
 
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("texture/texture.plist");
 
     // turn on display FPS
-    director->setDisplayStats(true);
+    director->setDisplayStats(false);
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0 / 60);

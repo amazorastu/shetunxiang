@@ -130,7 +130,7 @@ void ObjectMap::doMove(int posX, int posY, int direction)
 			{
 				if (dealContact(map[posX - 1][posY], map[posX][posY]))
 				{
-					removeObject(posX, posY, true);
+					removeObject(posX, posY, posX -1, posY, true);
 				}
 			}
 			break;
@@ -145,7 +145,7 @@ void ObjectMap::doMove(int posX, int posY, int direction)
 			{
 				if (dealContact(map[posX + 1][posY], map[posX][posY]))
 				{
-					removeObject(posX, posY, true);
+					removeObject(posX, posY, posX + 1, posY, true);
 				}
 			}
 			break;
@@ -200,11 +200,11 @@ bool ObjectMap::dealContact(ObjectBase* snake, ObjectBase* obj)
 			}
 		}
 
-		if (snake->getAttack() == obj->getAttack())
+		if (snake->getAttack() == obj->getAttack() && obj->getType() == objectTypeAnimalAttack)
 		{
 			snake->setAttack(snake->getAttack() + 1);
 		}
-		if (snake->getDefense() == obj->getDefense())
+		if (snake->getDefense() == obj->getDefense() && obj->getType() == objectTypeAnimalDefense)
 		{
 			snake->setDefense(snake->getDefense() + 1);
 		}
@@ -229,14 +229,30 @@ void ObjectMap::removeObject(int posX, int posY, bool eat)
 {
 	if (map[posX][posY]->getType() < 5)
 	{
-		if (eat)gameState ++;
+		if (eat)gameState++;
 		else gameState--;
 	}
 	else if (map[posX][posY]->getType() == 8)
 	{
 		hasElephant = false;
 	}
-	map[posX][posY]->removeFromParentAndCleanup(true);
+	map[posX][posY]->remove(posX, posY);
+	map[posX][posY] = nullptr;
+}
+
+void ObjectMap::removeObject(int posX, int posY, int newPosX, int newPosY, bool eat)
+{
+	if (map[posX][posY]->getType() < 5)
+	{
+		if (eat)gameState++;
+		else gameState--;
+	}
+	else if (map[posX][posY]->getType() == 8)
+	{
+		hasElephant = false;
+	}
+	//map[posX][posY]->removeFromParentAndCleanup(true);
+	map[posX][posY]->remove(newPosX, newPosY);
 	map[posX][posY] = nullptr;
 }
 

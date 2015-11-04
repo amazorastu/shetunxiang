@@ -79,9 +79,10 @@ void ObjectBase::setType(ObjectType pType)
 		defense = 0;
 		attackLabel->setString("0");
 		defenseLabel->setString("0");
-		this->setAttack(random(0, 8));
-		this->setDefense(random(0, 8));
-		if(attack == 0 && defense <= 1)this->setAttack(1);
+		this->setAttack(random(0, 9));
+		this->setDefense(random(0, 9));
+		if (attack < 1)this->setAttack(1);
+		if (defense < 1)this->setDefense(1);
 		attackLabel->setPosition(Vec2(50.0f, 125.0f));
 		defenseLabel->setPosition(Vec2(200.0f, 125.0f));
 		this->addChild(attackLabel);
@@ -93,9 +94,10 @@ void ObjectBase::setType(ObjectType pType)
 		defense = 0;
 		attackLabel->setString("0");
 		defenseLabel->setString("0");
-		this->setAttack(random(0, 8));
-		this->setDefense(random(0, 8));
-		if(attack ==0 && defense <= 1)this->setAttack(1);
+		this->setAttack(random(0, 9));
+		this->setDefense(random(0, 9));
+		if (attack < 1)this->setAttack(1);
+		if (defense < 1)this->setDefense(1);
 		attackLabel->setPosition(Vec2(50.0f, 175.0f));
 		defenseLabel->setPosition(Vec2(200.0f, 175.0f));
 		this->addChild(attackLabel);
@@ -151,6 +153,7 @@ int ObjectBase::getDefense()
 void ObjectBase::setAttack(int param)
 {
 	attack = param;
+	if(attack > 9)attack = 1;
 	char temp[3];
 	sprintf(temp, "%d", attack);
 	attackLabel->setString(temp);
@@ -174,6 +177,7 @@ void ObjectBase::setAttack(int param)
 void ObjectBase::setDefense(int param)
 {
 	defense = param;
+	if(defense > 9)defense = 1;
 	char temp[3];
 	sprintf(temp, "%d", defense);
 	defenseLabel->setString(temp);
@@ -210,4 +214,10 @@ void ObjectBase::setDefending(bool defending)
 bool ObjectBase::getDefending()
 {
 	return isDefending;
+}
+void ObjectBase::remove(int px, int py)
+{
+	this->stopAllActions();
+	this->runAction(MoveTo::create(0.2f, Vec2((Director::getInstance()->getWinSize().width - 1250.0f)*0.5f + px*250.0f - 125.0f, py*250.0f - 125.0f)));
+	this->runAction(Sequence::create(DelayTime::create(0.15f), CallFunc::create([&]{this->removeFromParentAndCleanup(true); }), nullptr));
 }

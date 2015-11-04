@@ -2,7 +2,7 @@
 
 USING_NS_CC;
 
-GameLayer::GameLayer() :isPaused(false), isTouched(false), isMoved(false)
+GameLayer::GameLayer() :isPaused(false), isTouched(false), isMoved(false), timer(0), moveInterval(0)
 {
 
 }
@@ -50,8 +50,30 @@ bool GameLayer::init()
 	snake->setPosition(-200.0f, -200.0f);
 	snake->setType(objectTypeSnakeAttack);
 	this->addChild(snake,3);
-	snake->setXY(random(1, 5), random(1, 8));
+	snake->setXY(random(2, 5), random(1, 8));
 	ObjectMap::addObject(snake);
+
+	timeLabel = Label::createWithTTF("00:00", "fonts/arial.ttf", 150.0f);
+	timeLabel->setTextColor(Color4B(255, 192, 0, 255));
+	timeLabel->setAnchorPoint(Vec2(1.0f, 1.0f));
+	timeLabel->setPosition(Director::getInstance()->getWinSize());
+	this->addChild(timeLabel, 4);
+
+	label1 = Label::createWithTTF("蛇吞象", "fonts/simhei.ttf", 120.0f);
+	label1->setTextColor(Color4B(255, 192, 0, 255));
+	label1->setAnchorPoint(Vec2(0.0f, 1.0f));
+	label1->setOpacity(0.0f);
+	label1->enableOutline(Color4B(0, 0, 0, 255), 4);
+	label1->setPosition(0.0f, Director::getInstance()->getWinSize().height);
+	this->addChild(label1, 4);
+
+	label2 = Label::createWithTTF("蛇吞相", "fonts/simhei.ttf", 120.0f);
+	label2->setTextColor(Color4B(255, 192, 0, 255));
+	label2->setAnchorPoint(Vec2(0.0f, 1.0f));
+	label2->setOpacity(0.0f);
+	label2->enableOutline(Color4B(0, 0, 0, 255), 4);
+	label2->setPosition(450.0, Director::getInstance()->getWinSize().height);
+	this->addChild(label2, 4);
 
 	return true;
 }
@@ -65,9 +87,27 @@ void GameLayer::onEnterTransitionDidFinish()
 
 void GameLayer::update(float dt)
 {
+	if (moveInterval > 0)
+	{
+		AudioManager::getInstance()->stopBGM();
+		moveInterval--;
+	}
+	else
+	{
+		AudioManager::getInstance()->startBGM();
+	}
+
+
 	if (ObjectMap::hasElephant == false && ObjectMap::ateElephant == false)
 	{
 		this->addObject(objectTypeElephant);
+	}
+	else if (ObjectMap::ateElephant)
+	{
+		if (label1->getOpacity() < 1)
+		{
+			label1->setOpacity(255.0f);
+		}
 	}
 
 	if (ObjectMap::gameState == 0)
@@ -94,6 +134,10 @@ void GameLayer::update(float dt)
 	{
 		this->showGameOverDialog(true);
 	}
+	if(ObjectMap::gameState >=8&&ObjectMap::gameState <100)
+	{
+		label2->setOpacity(255.0f);
+	}
 
 	if (random(1, 100) == 1)
 	{
@@ -105,6 +149,7 @@ void GameLayer::update(float dt)
 	}
 
 	ObjectMap::step();
+	this->tickTime();
 }
 
 
@@ -112,6 +157,7 @@ void GameLayer::showPauseDialog(bool show)
 {
 	if (show)
 	{
+		AudioManager::getInstance()->stopBGM();
 		this->removeButtonEvents();
 		this->unscheduleUpdate();
 		dialog = LayerColor::create(Color4B(0, 0, 0, 128));
@@ -131,6 +177,7 @@ void GameLayer::showPauseDialog(bool show)
 		this->removeChild(dialog, true);
 		this->addButtonEvents();
 		this->scheduleUpdate();
+		AudioManager::getInstance()->startBGM();
 	}
 }
 void GameLayer::showGameOverDialog(bool win)
@@ -138,6 +185,7 @@ void GameLayer::showGameOverDialog(bool win)
 	this->removeKeyboardEvents();
 	this->removeButtonEvents();
 	this->unscheduleUpdate();
+	AudioManager::getInstance()->stopBGM();
 
 	dialog = LayerColor::create(Color4B(0, 0, 0, 128));
 	auto button2 = MenuItemImage::create("res/Button4_0.png", "res/Button4_0.png", CC_CALLBACK_1(GameLayer::buttonCallback, this));
@@ -218,7 +266,27 @@ void GameLayer::addObject(ObjectType pType)
 }
 
 
-
+void GameLayer::tickTime()
+{
+	timer++;
+	if (timer % 3600 < 600 && timer % 216000 < 36000)
+	{
+		sprintf(timeString, "0%d:0%d", timer / 3600, (timer % 3600) / 60);
+	}
+	else if (timer % 3600 >= 600 && timer % 216000 < 36000)
+	{
+		sprintf(timeString, "0%d:%d", timer / 3600, (timer % 3600) / 60);
+	}
+	else if (timer % 3600 < 600 && timer % 216000 >= 36000)
+	{
+		sprintf(timeString, "%d:0%d", timer / 3600, (timer % 3600) / 60);
+	}
+	else
+	{
+		sprintf(timeString, "%d:%d", timer / 3600, (timer % 3600) / 60);
+	}
+	timeLabel->setString(timeString);
+}
 
 bool GameLayer::onTouchBegan(Touch *touch, Event*)
 {
@@ -233,29 +301,35 @@ void GameLayer::onTouchMoved(Touch *touch, Event*)
 {
 	if (isMoved)return;
 	auto currentPos = touch->getLocation();
-	if (currentPos.x - touchPos.x > 100.0f&&currentPos.y - touchPos.y > -50.0f&&currentPos.y - touchPos.y < 50.0f&&snake->getX() < 5)
+	if (currentPos.x - touchPos.x > 100.0f&&currentPos.y - touchPos.y > -90.0f&&currentPos.y - touchPos.y < 90.0f&&snake->getX() < 5)
 	{
 		ObjectMap::doMove(snake->getX(), snake->getY(), 2);
 		//snake->setXY(snake->getX() + 1, snake->getY());
 		isMoved = true;
 	}
-	else if (currentPos.x - touchPos.x < -100.0f&&currentPos.y - touchPos.y > -50.0f&&currentPos.y - touchPos.y < 50.0f&&snake->getX() > 1)
+	else if (currentPos.x - touchPos.x < -100.0f&&currentPos.y - touchPos.y > -90.0f&&currentPos.y - touchPos.y < 90.0f&&snake->getX() > 1)
 	{
 		ObjectMap::doMove(snake->getX(), snake->getY(), 0);
 		//snake->setXY(snake->getX() - 1, snake->getY());
 		isMoved = true;
 	}
-	else if (currentPos.y - touchPos.y > 100.0f&&currentPos.x - touchPos.x > -50.0f&&currentPos.x - touchPos.x < 50.0f&&snake->getY() < 8)
+	else if (currentPos.y - touchPos.y > 100.0f&&currentPos.x - touchPos.x > -90.0f&&currentPos.x - touchPos.x < 90.0f&&snake->getY() < 8)
 	{
 		ObjectMap::doMove(snake->getX(), snake->getY(), 1);
 		//snake->setXY(snake->getX(), snake->getY() + 1);
 		isMoved = true;
 	}
-	else if (currentPos.y - touchPos.y < -100.0f&&currentPos.x - touchPos.x > -50.0f&&currentPos.x - touchPos.x < 50.0f&&snake->getY() > 1)
+	else if (currentPos.y - touchPos.y < -100.0f&&currentPos.x - touchPos.x > -90.0f&&currentPos.x - touchPos.x < 90.0f&&snake->getY() > 1)
 	{
 		ObjectMap::doMove(snake->getX(), snake->getY(), 3);
 		//snake->setXY(snake->getX(), snake->getY() - 1);
 		isMoved = true;
+	}
+
+	if (isMoved)
+	{
+		AudioManager::getInstance()->playSoundEffect(audioTypeSnake);
+		moveInterval = 120;
 	}
 }
 void GameLayer::onTouchEnded(Touch *touch, Event*)
