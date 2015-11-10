@@ -36,6 +36,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	glview->setDesignResolutionSize(1250.0f, 2150.0f, ResolutionPolicy::SHOW_ALL);
 
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("texture/texture.plist");
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("pic/pic.plist");
 
     // turn on display FPS
     director->setDisplayStats(false);

@@ -3,7 +3,7 @@
 #include "cocos2d.h"
 
 #include "GameLayer.h"
-
+#include "HelpLayer.h"
 #include "ObjectMap.h"
 
 class MenuLayer : public cocos2d::LayerColor

@@ -76,7 +76,6 @@ void MenuLayer::onKeyReleased(EventKeyboard::KeyCode keyCode, Event * pEvent)
 	if (keyCode == EventKeyboard::KeyCode::KEY_BACK)
 	{
 		Director::getInstance()->end();
-
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 		exit(0);
 #endif
@@ -86,6 +85,8 @@ void MenuLayer::onKeyReleased(EventKeyboard::KeyCode keyCode, Event * pEvent)
 
 void MenuLayer::buttonCallback(Ref* ref)
 {
+	Director::getInstance()->getEventDispatcher()->removeEventListenersForType(EventListener::Type::TOUCH_ONE_BY_ONE);
+	Director::getInstance()->getEventDispatcher()->removeEventListenersForType(EventListener::Type::KEYBOARD);
 	auto button = (MenuItemImage*)ref;
 	if (button == button0)
 	{
@@ -94,7 +95,7 @@ void MenuLayer::buttonCallback(Ref* ref)
 	}
 	else if (button == button1)
 	{
-
+		Director::getInstance()->pushScene(TransitionCrossFade::create(0.3f, HelpLayer::createScene()));
 	}
 	else if (button == button2)
 	{

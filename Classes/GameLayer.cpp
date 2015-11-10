@@ -197,16 +197,17 @@ void GameLayer::showGameOverDialog(bool win)
 
 	
 	auto label = Label::createWithTTF("", "fonts/simhei.ttf", 150.0f);
+	label->enableOutline(Color4B::WHITE, 5.0f);
 	
 	label->setPosition(Director::getInstance()->getWinSize().width*0.5f, Director::getInstance()->getWinSize().height*0.5f + 200.0f);
 	if (win)
 	{
-		label->setColor(Color3B::RED);
+		label->setTextColor(Color4B::RED);
 		label->setString("胜利");
 	}
 	else
 	{
-		label->setColor(Color3B::BLACK);
+		label->setTextColor(Color4B::BLACK);
 		label->setString("失败");
 	}
 	dialog->addChild(label);
